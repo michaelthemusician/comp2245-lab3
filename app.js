@@ -51,11 +51,16 @@ function buildBoard() {
     });
 }
 
+
+function cardNumber(card) {
+    return Number(card.dataset.index) + 1;
+}
+
 function flipCard(card) {
     const fruit = deck[card.dataset.index];
     card.textContent = fruit.symbol;
     card.classList.add("flipped");
-    card.setAttribute("aria-label", `Card ${card.dataset.index}, ${fruit.name}`);
+    card.setAttribute("aria-label", `Card ${cardNumber(card)}, ${fruit.name}`);
     turned.push(card);
 
     if (turned.length === 2) {
@@ -66,7 +71,7 @@ function flipCard(card) {
 function turnBack(card) {
     card.textContent = "";
     card.classList.remove("flipped");
-    card.setAttribute("aria-label", `Card ${Number(card.dataset.index) + 1}, face down`);
+    card.setAttribute("aria-label", `Card ${cardNumber(card)}, face down`);
 }
 
 
