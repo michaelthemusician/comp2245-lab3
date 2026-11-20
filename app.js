@@ -31,6 +31,7 @@ const newGameButton = document.querySelector("#new-game"); //check the id in ind
 //current state of the game
 let deck = [];
 let turned = []; //the cards face up
+let moves = 0;
 
 
 
@@ -54,6 +55,36 @@ function flipCard(card) {
     card.classList.add("flipped");
     card.setAttribute("aria-label", `Card ${card.dataset.index}, ${fruit.name}`);
     turned.push(card);
+
+    if (turned.length === 2) {
+        checkForMatch();
+    }
+}
+
+function showMoves() {
+    moveCounter.textContent = String(moves);
+}
+
+function checkForMatch() {
+    const [first, second] = turned;
+
+    moves++;
+    showMoves();
+
+    const sameFruit =
+    deck[first.dataset.index].name === deck[second.dataset.index].name;
+
+    if (sameFruit) {
+        first.classList.add("matched");
+        second.classList.add("matched");
+        first.disabled = true;
+        second.disabled = true;
+        statusMessage.textContent = "That's a pair!";
+        turned = [];
+    } else {
+        // Exercise 4 goes here
+        turned = [];
+    }
 }
 
 board.addEventListener("click", (event) => {
