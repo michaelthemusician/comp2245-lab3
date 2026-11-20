@@ -115,7 +115,7 @@ function checkForMatch() {
 }
 
 board.addEventListener("click", (event) => {
-    if (waiting) return; // new
+    if (waiting) return; //new
 
     const card = event.target;
     if (!card.classList.contains("card")) return;
@@ -125,3 +125,25 @@ board.addEventListener("click", (event) => {
 });
 
 buildBoard();
+
+
+
+
+function newGame() {
+    //cancels a pending turn-back so it can't touch the new game
+    clearTimeout(turnBackTimer);
+    waiting = false;
+
+    turned = [];
+    moves = 0;
+    matchedPairs = 0;
+    showMoves();
+
+    statusMessage.textContent = "Turn over two cards to find a matching pair.";
+    statusMessage.classList.remove("you-won");
+
+    board.replaceChildren(); //remove the old cards
+    buildBoard();            //build and shuffle a new deck
+}
+
+newGameButton.addEventListener("click", newGame);
