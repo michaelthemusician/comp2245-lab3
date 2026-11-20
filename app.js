@@ -34,7 +34,7 @@ let turned = []; //the cards face up
 let moves = 0;
 let waiting = false; //true while two wrong cards are showing
 let turnBackTimer = null; //the id of the pending timer, used in Exercise 6
-
+let matchedPairs = 0;
 
 
 function buildBoard() {
@@ -93,8 +93,15 @@ function checkForMatch() {
         second.classList.add("matched");
         first.disabled = true;
         second.disabled = true;
-        statusMessage.textContent = "That's a pair!";
         turned = [];
+        matchedPairs++;
+
+        if (matchedPairs === fruits.length) {
+            statusMessage.textContent = `You found all the pairs in ${moves} moves!`;
+            statusMessage.classList.add("you-won");
+        } else {
+            statusMessage.textContent = "That's a pair!";
+        }
     } else {
         statusMessage.textContent = "Not a pair. Try again.";
         waiting = true;
