@@ -23,13 +23,16 @@ function shuffle(array) {
 const board = document.querySelector("#board");
 const statusMessage = document.querySelector("#status");
 const moveCounter = document.querySelector("#moves");
-const newGameButton = document.querySelector("#new-game"); //scheck the id in index.html
+const newGameButton = document.querySelector("#new-game"); //check the id in index.html
 
 
 
 
 //current state of the game
 let deck = [];
+let turned = []; //the cards face up
+
+
 
 function buildBoard() {
     //every fruit twice = 16 cards, shuffled
@@ -44,5 +47,25 @@ function buildBoard() {
         board.appendChild(card);
     });
 }
+
+function flipCard(card) {
+    const fruit = deck[card.dataset.index];
+    card.textContent = fruit.symbol;
+    card.classList.add("flipped");
+    card.setAttribute("aria-label", `Card ${card.dataset.index}, ${fruit.name}`);
+    turned.push(card);
+}
+
+board.addEventListener("click", (event) => {
+    const card = event.target;
+
+    // Ignore clicks on the gaps between cards
+    if (!card.classList.contains("card")) return;
+
+    // A face-up card can't be turned again
+    if (card.classList.contains("flipped")) return;
+
+    flipCard(card);
+});
 
 buildBoard();
