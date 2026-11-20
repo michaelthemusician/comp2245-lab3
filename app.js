@@ -32,6 +32,8 @@ const newGameButton = document.querySelector("#new-game"); //check the id in ind
 let deck = [];
 let turned = []; //the cards face up
 let moves = 0;
+let waiting = false; //true while two wrong cards are showing
+let turnBackTimer = null; //the id of the pending timer, used in Exercise 6
 
 
 
@@ -61,6 +63,13 @@ function flipCard(card) {
     }
 }
 
+function turnBack(card) {
+    card.textContent = "";
+    card.classList.remove("flipped");
+    card.setAttribute("aria-label", `Card ${Number(card.dataset.index) + 1}, face down`);
+}
+
+
 function showMoves() {
     moveCounter.textContent = String(moves);
 }
@@ -82,18 +91,22 @@ function checkForMatch() {
         statusMessage.textContent = "That's a pair!";
         turned = [];
     } else {
-        // Exercise 4 goes here
-        turned = [];
+        statusMessage.textContent = "Not a pair. Try again.";
+        waiting = true;
+        turnBackTimer = setTimeout(() => {
+            turnBack(first);
+            turnBack(second);
+            turned = [];
+            waiting = false;
+        }, 1000);
     }
 }
 
 board.addEventListener("click", (event) => {
+    if (waiting) return; // new
+
     const card = event.target;
-
-    // Ignore clicks on the gaps between cards
     if (!card.classList.contains("card")) return;
-
-    // A face-up card can't be turned again
     if (card.classList.contains("flipped")) return;
 
     flipCard(card);
